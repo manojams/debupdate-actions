@@ -1,0 +1,28 @@
+# recipe.yaml
+
+{{ $imgname := or .imgname "dummy" }}
+
+architecture: arm64
+
+actions:
+- action: recipe
+  recipe: ../debos/ospack.yaml
+  variables:
+    hostname: {{ $imgname }}
+
+- action: recipe
+  recipe: ../debos/osvideopack.yaml
+  variables:
+    multi_cam_rkaiq: true
+
+- action: recipe
+  recipe: ../debmodel/osmodelpack.yaml
+
+- action: recipe
+  recipe: ./osupdatepack.yaml
+
+- action: recipe
+  recipe: ./image.yaml
+  variables:
+    osinpack: osupdatepack
+    imgname: {{ $imgname }}

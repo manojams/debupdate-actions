@@ -1,0 +1,107 @@
+{{ $architecture := or .architecture "arm64" }}
+{{ $suite := or .suite "bullseye" }}
+{{ $osinpack := or .osinpack "osupdatepack" }}
+{{ $ospack := or .ospack (printf "%s-%s-%s" $osinpack $suite $architecture) }}
+{{ $board := or .board "neu6b-io" }}
+{{ $imagesize := or .imagesize "18GB" }}
+{{ $imgname := or .imgname "dummy" }}
+{{ $image := or .image (printf "openaia-%s-%s" $suite $imgname) }}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: unpack
+    description: Unpack {{ $ospack }}
+    file: {{ $ospack }}.tar.gz
+
+  - action: image-partition
+    imagename: {{ $image }}.img
+    imagesize: {{$imagesize}}
+    partitiontype: gpt
+    mountpoints:
+      - mountpoint: /
+        partition: rootfs
+      - mountpoint: /bootA
+        partition: bootA
+      - mountpoint: /bootB
+        partition: bootB
+        options: [ x-systemd.automount ]
+    partitions:
+      - name: loader1
+        fs: none
+        start: 64s
+        end: 7168s
+      - name: loader2
+        fs: none
+        start: 16384s
+        end: 24575s
+      - name: bootA
+        fs: fat32
+        start: 32768S
+        end: 229376S
+        flags: [ boot, esp ]
+      - name: bootB
+        fs: fat32
+        start: 262144S
+        end: 458752S
+        flags: [ boot, esp ]
+      - name: rootfs
+        fs: ext4
+        start: 491520S
+        end: 12582912S
+        partuuid: b921b045-1df0-41c3-af44-4c6f280d3fae
+      - name: rootfsB
+        fs: ext4
+        start: 13074432S
+        end: 25657343S
+        partuuid: 5b63167a-6fd2-4e72-948c-90832372956c
+
+  - action: filesystem-deploy
+    description: Deploying filesystem onto image
+    setup-fstab: true
+    setup-kernel-cmdline: true
+
+  - action: overlay
+    description: Copy Image, dtb
+    source: ../debos/prebuilt/linux
+    destination: /bootA
+
+  - action: overlay
+    description: Copy extlinux
+    source: ../debos/overlay/boot/rockchip
+    destination: /bootA
+
+  - action: overlay
+    description: Copy Image, dtb
+    source: ../debos/prebuilt/linux
+    destination: /bootB
+
+  - action: overlay
+    description: Copy extlinux
+    source: ../debos/overlay/boot/rockchip
+    destination: /bootB
+
+  - action: raw
+    description: Flash idbloader.img to loader1
+    origin: recipe
+    source: ../debos/prebuilt/idbloader.img
+    partition: loader1
+    offset: 0
+
+  - action: raw
+    description: Flash u-boot.itb to loader2
+    origin: recipe
+    source: ../debos/prebuilt/u-boot.itb
+    partition: loader2
+    offset: 0
+
+  - action: run
+    description: Create block map for {{ $image }}.img
+    chroot: false
+    postprocess: true
+    command: bmaptool create {{ $image }}.img > {{ $image }}.bmap
+
+  - action: run
+    description: Compress {{ $image }}.img
+    postprocess: true
+    command: pigz -f {{ $image }}.img

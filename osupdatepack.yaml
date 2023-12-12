@@ -1,0 +1,55 @@
+{{ $architecture := or .architecture "arm64" }}
+{{ $suite := or .suite "bullseye" }}
+{{ $osmodelpack := or .osmodelpack (printf "osmodelpack-%s-%s" $suite $architecture) }}
+{{ $osupdatepack := or .osupdatepack (printf "osupdatepack-%s-%s" $suite $architecture) }}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: unpack
+    description: Unpack osmodelpack
+    file: {{ $osmodelpack }}.tar.gz
+
+  - action: overlay
+    description: Copy swupdate
+    source: prebuilt/swupdate
+    destination: /opt
+
+  - action: apt
+    description: install swupdate dependencies
+    packages:
+      - make
+      - lua5.2-dev
+      - libssl-dev
+      - libconfig-dev
+      - libarchive-dev
+      - libzmq3-dev
+      - libcurl4-gnutls-dev
+      - build-essential
+      - libmtd-dev
+      - liblua5.4-dev
+      - libubi-dev
+      - libubootenv-dev
+      - libubootenv-tool
+      - libfdisk-dev
+      - dh-lua
+      - git
+
+  - action: run
+    description: install swupdate
+    chroot: true
+    script: scripts/build-swupdate.sh
+
+  - action: run
+    description: uninstall swupdate dependencies
+    chroot: true
+    script: scripts/apt-uninstall.sh
+
+  - action: overlay
+    description: overlay swupdate cfg files
+    source: overlay/etc
+    destination: /etc/
+
+  - action: pack
+    description: Pack into tarball
+    file: {{ $osupdatepack }}.tar.gz
