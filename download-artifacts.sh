@@ -15,5 +15,9 @@ cd prebuilt && git clone -b $SWUPDATE https://github.com/sbabic/swupdate.git && 
 echo "=== Downloading swupdate-config ==="
 cp -v overlay/configs/debupdate_defconfig prebuilt/swupdate/configs
 
+# swupdate-hawkbit-config
+echo "=== Downloading swupdate-hawkbit-config ==="
+cp -v overlay/configs/debupdate-hawkbit_defconfig prebuilt/swupdate/configs
+
 find prebuilt/
 echo "=== Remember to remove prebuilt directory for new aritfacts to load ==="

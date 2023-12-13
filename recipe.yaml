@@ -1,6 +1,7 @@
 # recipe.yaml
 
 {{ $imgname := or .imgname "dummy" }}
+{{ $debupdate_hawkbit := or .debupdate_hawkbit "false" }}
 
 architecture: arm64
 
@@ -20,6 +21,8 @@ actions:
 
 - action: recipe
   recipe: ./osupdatepack.yaml
+  variables:
+    debupdate_hawkbit: {{ $debupdate_hawkbit }}
 
 - action: recipe
   recipe: ./image.yaml

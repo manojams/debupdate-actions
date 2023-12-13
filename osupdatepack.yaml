@@ -2,6 +2,7 @@
 {{ $suite := or .suite "bullseye" }}
 {{ $osmodelpack := or .osmodelpack (printf "osmodelpack-%s-%s" $suite $architecture) }}
 {{ $osupdatepack := or .osupdatepack (printf "osupdatepack-%s-%s" $suite $architecture) }}
+{{ $debupdate_hawkbit := or .debupdate_hawkbit "false" }}
 
 architecture: {{ $architecture }}
 
@@ -38,7 +39,11 @@ actions:
   - action: run
     description: install swupdate
     chroot: true
+{{ if eq $debupdate_hawkbit "false" }}
     script: scripts/build-swupdate.sh debupdate
+{{ else }}
+    script: scripts/build-swupdate.sh debupdate-hawkbit
+{{ end }}
 
   - action: run
     description: uninstall swupdate dependencies
