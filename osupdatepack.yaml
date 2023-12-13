@@ -38,7 +38,7 @@ actions:
   - action: run
     description: install swupdate
     chroot: true
-    script: scripts/build-swupdate.sh
+    script: scripts/build-swupdate.sh debupdate
 
   - action: run
     description: uninstall swupdate dependencies

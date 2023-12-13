@@ -1,5 +1,5 @@
 #!/bin/sh
 
 cd /opt
-make debupdate_defconfig && make && make install
+make $1_defconfig && make && make install
 rm -rf /opt/*
