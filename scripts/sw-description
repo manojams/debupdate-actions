@@ -1,0 +1,17 @@
+software =
+{
+    version = "1.0.1";
+    neu6 = {
+        hardware-compatibility: [ "1.0" ];
+        files: (
+            {
+                filename = "osupdatepack-bullseye-arm64.tar.gz";
+                device = "/dev/mmcblk1p6";
+                type = "archive";
+                installed-directly = true;
+                filesystem = "ext4";
+		path = "/"
+            }
+        );
+    };
+}

@@ -26,3 +26,6 @@ actions:
   variables:
     osinpack: osupdatepack
     imgname: {{ $imgname }}
+
+- action: recipe
+  recipe: ./swu.yaml

@@ -1,0 +1,8 @@
+# swu.yaml
+
+architecture: arm64
+
+actions:
+- action: run
+  postprocess: true
+  script: scripts/build-swu.sh ./debupdate/scripts/sw-description osupdatepack-bullseye-arm64.tar.gz
