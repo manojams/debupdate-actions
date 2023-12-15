@@ -22,14 +22,22 @@ jobs:
         cd debupdate-actions
         ls
 
-    - name: Upload output artifacts
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: "v2024.01-rc2"
-        body: |
-          ## OpenAIA Debomodel v2024.01-rc2
-          - hawkbit
-        files: |
-           ${{ runner.workspace }}/update-image-6tops-v1.swu
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: SWU file Upload  to Hawkbit server
+      run: |
+          cd ${{ runner.workspace }}
+                    
+          curl -i -X POST 'http://localhost:8080/rest/v1/softwaremodules' \
+            -u 'admin:admin' \
+            -H 'Content-Type: application/json' \
+            -d '[{
+            "vendor": "Edgeble",
+            "name": "Neu6b swu image",
+            "description": "Neu6b update image",
+            "type": "os",
+            "version": "1.0"
+            }]'
+        
+          curl -i -X POST 'http://localhost:8080/rest/v1/softwaremodules/1/artifacts' \
+            -u 'admin:admin' \
+            -H 'Content-Type: multipart/form-data' \
+            -F 'file=@update-image-6tops-v1.swu'  
