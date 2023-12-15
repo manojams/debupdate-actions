@@ -19,6 +19,7 @@ jobs:
       run: |
         cd ${{ runner.workspace }}
         ls
+        git clone git@github.com:manojams/debupdate-actions.git -b kirkstone
 
     - name: Upload output artifacts
       uses: softprops/action-gh-release@v1
@@ -28,6 +29,6 @@ jobs:
           ## OpenAIA Debomodel v2024.01-rc2
           - hawkbit
         files: |
-           ${{ runner.workspace }}/debupdate-openaia/update-image-6tops-v1.swu
+           ${{ runner.workspace }}/debupdate-actions/update-image-6tops-v1.swu
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
