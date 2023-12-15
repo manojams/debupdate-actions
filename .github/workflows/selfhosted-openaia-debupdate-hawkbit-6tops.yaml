@@ -30,6 +30,6 @@ jobs:
           ## OpenAIA Debomodel v2024.01-rc2
           - hawkbit
         files: |
-           ${{ runner.workspace }}/debupdate-actions/update-image-6tops-v1.swu
+           ${{ runner.workspace }}/update-image-6tops-v1.swu
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
