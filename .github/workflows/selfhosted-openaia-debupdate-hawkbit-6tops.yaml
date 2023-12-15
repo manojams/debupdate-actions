@@ -19,6 +19,8 @@ jobs:
       run: |
         cd ${{ runner.workspace }}
         ls
+        cd debupdate-actions
+        ls
 
     - name: Upload output artifacts
       uses: softprops/action-gh-release@v1
