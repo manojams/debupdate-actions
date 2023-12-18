@@ -21,4 +21,5 @@ jobs:
         ls
         cd debupdate-actions
         ls
+        chmod +x v2-hawkbit-neu6-setup.sh
         ./v2-hawkbit-neu6-setup.sh
