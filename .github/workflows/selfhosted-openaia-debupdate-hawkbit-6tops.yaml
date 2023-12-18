@@ -29,3 +29,4 @@ jobs:
         ls
         cd debupdate-actions
         ls
+        ./v2-hawkbit-neu6-setup.sh
