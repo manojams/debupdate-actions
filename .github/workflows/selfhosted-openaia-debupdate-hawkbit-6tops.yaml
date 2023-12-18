@@ -23,3 +23,10 @@ jobs:
         ls
         chmod +x v2-hawkbit-neu6-setup.sh
         ./v2-hawkbit-neu6-setup.sh
+
+    - name: run hawkbit swupdate action
+      run: |
+        cd ${{ runner.workspace }}
+        ls
+        cd debupdate-actions
+        ls
