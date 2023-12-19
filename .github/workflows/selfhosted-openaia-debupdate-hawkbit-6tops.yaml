@@ -17,10 +17,13 @@ jobs:
       
     - name: Stop running Docker container
       run: |
-        sudo docker stop $(sudo docker ps -q --filter ancestor=hawkbit/hawkbit-update-server:latest)
+        password="9063"
+        echo "$password" | sudo docker stop $(sudo docker ps -q --filter ancestor=hawkbit/hawkbit-update-server:latest)
     
     - name: Run Docker in a new terminal
-      run: gnome-terminal -- sudo docker run -p 8080:8080 hawkbit/hawkbit-update-server:latest
+      run: |
+        password="9063"
+        echo "$password" | gnome-terminal -- sudo docker run -p 8080:8080 hawkbit/hawkbit-update-server:latest
       
     - name: Clone OpenAIA Debupdate
       run: |
