@@ -18,7 +18,7 @@ jobs:
     - name: Stop running Docker container
       run: |
         password="9063"
-        echo "$password" | sudo docker stop $(sudo docker ps -q --filter ancestor=hawkbit/hawkbit-update-server:latest)
+        echo "$password" | sudo -S docker stop $(sudo docker ps -q --filter ancestor=hawkbit/hawkbit-update-server:latest)
     
     - name: Run Docker in a new terminal
       run: |
