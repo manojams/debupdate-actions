@@ -14,7 +14,14 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
+      
+    - name: Stop running Docker container
+      run: |
+        sudo docker stop $(sudo docker ps -q --filter ancestor=hawkbit/hawkbit-update-server:latest)
+    
+    - name: Run Docker in a new terminal
+      run: gnome-terminal -- sudo docker run -p 8080:8080 hawkbit/hawkbit-update-server:latest
+      
     - name: Clone OpenAIA Debupdate
       run: |
         cd ${{ runner.workspace }}
