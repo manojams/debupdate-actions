@@ -14,15 +14,41 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-            
+
     - name: Clone OpenAIA Debupdate
       run: |
         cd ${{ runner.workspace }}
         ls
         cd debupdate-actions
+
+    - name: Upload output artifacts
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: "v2024.01-rc3"
+        body: |
+          ## OpenAIA Debomodel v2024.01-rc2
+          - hawkbit
+        files: |
+          ${{ runner.workspace }}/update-image-6tops-v1.swu
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Checkout Release
+      uses: actions/checkout@v2
+      with:
+        ref: "v2024.01-rc3"
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Download Release Artifact
+      run: |
+        wget --header="Authorization: token $GITHUB_TOKEN" https://github.com/manojams/debupdate-actions/releases/download/v2024.01-rc3/update-image-6tops-v1.swu
         ls
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: run hawkbit swupdate action
       run: |
         cd ${{ runner.workspace }}
         ls
-        ./v2-hawkbit-neu6-setup.sh
+        ./first-device-hawkbit.sh
+        ./second-device-hawkbit.sh
