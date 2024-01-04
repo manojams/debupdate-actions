@@ -44,7 +44,7 @@ jobs:
 
     - name: Download Release Artifact
       run: |
-        wget --header="Authorization: token $GITHUB_TOKEN" https://github.com/manojams/debupdate-actions/releases/download/${{ env.TAG_NAME }}/update-image-6tops-v1.swu
+        curl -LJO -H "Authorization: token ${{ secrets.ACCESS_TOKEN }}" "https://api.github.com/repos/manojams/debupdate-actions/releases/tags/${{ env.TAG_NAME }}/update-image-6tops-v1.swu"
         ls
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
