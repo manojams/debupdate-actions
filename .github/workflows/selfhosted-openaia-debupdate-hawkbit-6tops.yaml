@@ -42,18 +42,17 @@ jobs:
         ref: ${{ env.TAG_NAME }}
         token: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Get Release Asset URL
+      id: get_asset_url
+      run: |
+        ASSET_URL=$(curl -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/manojams/debupdate-actions/releases/tags/v2024.04-rc1 | jq -r '.assets[] | select(.name == "update-image-6tops-v1.swu") | .browser_download_url')
+        echo "::set-output name=asset_url::$ASSET_URL"
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Download Release Artifact
       run: |
-        curl -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/manojams/debupdate-actions/releases/tags/v2024.04-rc1
-        ls
-        curl -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/octet-stream" -LOJ "https://api.github.com/repos/manojams/debupdate-actions/releases/assets/143764582"
+        curl -H "Authorization: token ${GITHUB_TOKEN}" -LOJ "${{ steps.get_asset_url.outputs.asset_url }}"
         ls
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: run hawkbit swupdate action
-      run: |
-        cd ${{ runner.workspace }}
-        ls
-        ./first-device-hawkbit.sh
-        ./second-device-hawkbit.sh
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
