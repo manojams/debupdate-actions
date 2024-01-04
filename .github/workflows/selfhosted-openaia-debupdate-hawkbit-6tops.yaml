@@ -45,7 +45,7 @@ jobs:
     - name: Get Release Asset URL
       id: get_asset_url
       run: |
-       ASSET_URL=$(curl -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/manojams/debupdate-actions/releases/tags/v2024.04-rc1 | jq -r '.assets[] | select(.name == "update-image-6tops-v1.swu") | .url')
+       ASSET_URL=$(curl -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/manojams/debupdate/releases/tags/v2024.04-rc1 | jq -r '.assets[] | select(.name == "update-image-6tops-v1.swu") | .url')
        echo "$ASSET_URL" > asset_url.txt
       env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
