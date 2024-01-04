@@ -54,7 +54,7 @@ jobs:
     - name: Download Release Artifact
       run: |
        ASSET_URL=$(cat asset_url.txt)
-       curl -H "Authorization: token ${GITHUB_TOKEN}" -LOJ "$ASSET_URL"
+       curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept:application/octet-stream' -LOJ "$ASSET_URL" -o update-image-6tops-v1.swu
        ls
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
