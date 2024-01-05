@@ -32,6 +32,9 @@ jobs:
           ## OpenAIA Debomodel ${{ env.TAG_NAME }}
           - hawkbit
         files: |
+          ${{ runner.workspace }}/openaia-bullseye-6tops.bmap
+          ${{ runner.workspace }}/openaia-bullseye-6tops.img.gz
+          ${{ runner.workspace }}/osupdatepack-bullseye-arm64.tar.gz
           ${{ runner.workspace }}/update-image-6tops-v1.swu
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
